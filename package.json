@@ -1,0 +1,15 @@
+{
+  "name": "newprac-backened",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "npm run"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    
+  }
+}
