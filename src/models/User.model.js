@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import mongoose, { Types } from "mongoose";
+import mongoose, { Schema} from "mongoose";
 import bcrypt from "bcrypt";
-const UserSchema=new mongoose.Schema(
+const UserSchema=new Schema(
     {
         username:{
             type:String,
@@ -31,7 +31,7 @@ const UserSchema=new mongoose.Schema(
             },
             coverImage:{
                 type:String,//cloudinary url
-                required: true,
+                
             },
             watchhistory:[
                 {
