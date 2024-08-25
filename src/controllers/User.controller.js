@@ -26,11 +26,12 @@ const registerUser=asyncHandler(async(req,res)=>{
     const avatarLocalPath=req.files?.avatar[0]?.path
     console.log("avatarlocalpath",avatarLocalPath)
     const coverImageLocalPath=req.files?.coverImage[0]?.path
-    console.log("avatarlocalpath",coverImageLocalPath[0])
+    console.log("coverIamagelocalPath",req.files)
 if(!avatarLocalPath){
     throw new Apierror(400,"avatar file is required")
 }
 const avatar=await uploadOnCloudinary(avatarLocalPath)
+console.log("cloudinary",avatar)
 if(!avatar){
     throw new Apierror(400,"avatar file is required")
 }
@@ -47,6 +48,7 @@ const user=await User.create({
 const createdUser=await User.findById(user._id).select(
     "-password -refreshToken"
 )
+console.log("createdusers",createdUser)
 if(!createdUser){
     throw new Apierror(500,"something went wrong while register")
 }
