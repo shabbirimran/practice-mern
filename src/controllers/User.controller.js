@@ -3,14 +3,15 @@ import {Apierror} from '../utils/Apierror.js'
 import {User} from '../models/User.model.js'
 import {uploadOnCloudinary} from '../utils/Cloudinary.js'
 import {Apiresponse} from '../utils/Apiresponse.js'
-import { set } from 'mongoose'
+
 
 const generateAccessandRefreshtokens=async(userId)=>{
     try {
         const user=User.findById(userId)
+        console.log(user,"users")
         const accessToken=user.generateAccessToken()
         const refreshToken=user.generateRefreshToken()
-        user.refreshToekn=refreshToekn
+        user.refreshToken=refreshToken
         await user.save({validateBeforeSave:false})
         return{
             accessToken,refreshToken
@@ -84,7 +85,8 @@ const loginUser=asyncHandler(async(req,res)=>{
    //response
    
     const {username,email,password}=req.body
-    if(!username || !email){
+    console.log(email)
+    if(!(username || email)){
         throw new Apierror(400,"username or email is required")
     }
     const user=await User.findOne({
