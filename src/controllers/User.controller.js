@@ -269,4 +269,63 @@ const updatecoverImage=asyncHandler(async(req,res)=>{
         new Apiresponse(200,user,"Avatar Image Upload on Successfully")
     )
 })
-export {registerUser,loginUser,logoutUser,refreshAccessToken,changeCurrentPassword,getcurrentUser,updateAccountDetails,updateAvatar,updatecoverImage}
+const getUserChannelProfile=asyncHandler(async(req,res)=>{
+    const {username}=req.params
+    if(!username.trim()){
+        throw new Apierror(404,"username is missing")
+    }
+    const channel=await User.aggregate([
+        {
+            $match:{
+                username:username?.toLowerCase(),
+            }
+    },
+    {
+        $lookup:{
+            from:"subscriptions",
+            localField:_.id,
+            foreignField:channel,
+            as:subscribers
+        }
+    },
+    {
+        $lookup:{
+            from:"subscriptions",
+            localField:_.id,
+            foreignField:subscribers,
+            as:subscribedTo
+        }
+    },{
+        $addFields:{
+            subscribersCount:{
+                $size:"$subscribers"
+            },
+            channelsSubscribedToCount:{
+                $size:"$subscribedTo"
+            },
+            isSubscribed:{
+                $cond:{
+                    if:{$in:[req.user?._id,"$subscribers.subscribers"]},
+                    then:true,
+                    else:false
+                
+                }
+            }
+        },
+        
+    },
+    {
+        $project:{
+            fullname:1,
+            username:1,
+            subscribersCount:1,
+            isSubscribed:1,
+            avatar:1,
+            coverImage:1,
+            email:1
+
+        }
+    }
+])
+})
+export {registerUser,loginUser,logoutUser,refreshAccessToken,changeCurrentPassword,getcurrentUser,updateAccountDetails,updateAvatar,updatecoverImage,getUserChannelProfile}
